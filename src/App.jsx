@@ -8,18 +8,32 @@ const TURNS = {
   O: 'O',
 }
 
-const board = Array(9).fill(null)
 
-const Square = ({ children, updateBoard, i}) => {
+const Square = ({ children, isSelected ,updateBoard, i}) => {
+  const className = `square ${isSelected ? 'is-selected' : ''}`
+
+  const handleClick = (e) => {
+    updateBoard()
+  }
+
   return (
-    <div className='square'>
+    <div 
+    onClick={handleClick}
+    className={className}>
       {children}
     </div>
   )
 } 
 
+const updateBoard = () => {
+  const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X
+}
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [board, setBoard] = useState(
+    Array(9).fill(null)
+    )
+  const [turn, setTurn] = useState(TURNS.X)
 
   return (
     <main className='board'>
@@ -31,12 +45,23 @@ function App() {
             return (
               <Square
               key={i}
-              index={i}>
-                
+              index={i}
+              updateBoard={updateBoard}
+              >
+                {board[i]}
               </Square>
             )
           })
         }
+      </section>
+
+      <section className='turn'>
+        <Square isSelected={turn === TURNS.X}>
+          {TURNS.X}
+        </Square>
+        <Square isSelected={turn === TURNS.O}>
+          {TURNS.O}
+        </Square>
       </section>
     </main>
   )
